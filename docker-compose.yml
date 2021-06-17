@@ -54,13 +54,12 @@ services:
   #   build:
   #     context: .
   #     target: production
-  #     dockerfile: ./Dockerfile
   #   command: yarn run start:prod
   #   ports: 
   #     - 3000:3000
-  #     - 9229:9229
+  #     - 9226:9226
   #   networks:
-  #     - nesjs-network
+  #     - webnet
   #   volumes: 
   #     - .:/usr/src/app
   #     - /usr/src/app/node_modules
