@@ -1,0 +1,72 @@
+version: '3.9'
+services:
+  database:
+    image: "postgres:latest"
+    container_name: "DB_bn"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /data/postgres
+    volumes:
+      - pgData:/var/lib/postgresql/data
+    networks: 
+      - webnet
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: "DB_bn_visualize"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes: 
+      - pgAdmin:/root/.pgadmin
+    ports:
+      - 5050:80
+    networks: 
+      - webnet
+  dev:
+    container_name: needs_lead_api_dev
+    image: needs-lead-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+    command: yarn run start:debug
+    ports: 
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - webnet
+    env_file: 
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on: 
+      - database
+      - pgAdmin
+
+  # prod:
+  #   container_name: needs_lead_api_prod
+  #   image: needs-lead-api-prod:1.0.0
+  #   build:
+  #     context: .
+  #     target: production
+  #   command: yarn run start:prod
+  #   ports: 
+  #     - 3000:3000
+  #     - 9226:9226
+  #   networks:
+  #     - webnet
+  #   volumes: 
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   restart: unless-stopped
+
+networks: 
+    webnet:
+volumes:
+    pgData:
+    pgAdmin:

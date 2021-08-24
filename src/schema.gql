@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserInputDTO {
+  about: String
+  address: String!
+  contact: String!
+  email: String!
+  fullname: String!
+  picture: String
+}
+
+type Mutation {
+  createUser(createUserData: CreateUserInputDTO!): UserModel!
+}
+
+type Query {
+  landingPage: String!
+}
+
+type UserModel {
+  about: String
+  address: String!
+  contact: String!
+  email: String!
+  fullname: String!
+  picture: String
+  user_id: String!
+}
